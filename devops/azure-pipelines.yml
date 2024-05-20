@@ -1,12 +1,4 @@
 # azure-pipelines.yml
-parameters:
-- name: AWS_ACCOUNT
-  type: string
-  default: 'AWS_ACCOUNT'
-- name: REGION_ACCOUNT
-  type: string
-  default: 'us-east-1'
-
 trigger:
 - develop
 - release
@@ -23,7 +15,4 @@ resources:
       ref: 'master'
 
 stages:
-- template: Build
-  parameters:
-    AWS_ACCOUNT: '${{ parameters.AWS_ACCOUNT }}'
-    REGION_ACCOUNT: '${{ parameters.REGION_ACCOUNT }}'
+- template: templates/buildTemplate.yml@templates
