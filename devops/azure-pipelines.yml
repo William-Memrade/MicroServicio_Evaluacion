@@ -1,0 +1,54 @@
+# azure-pipelines.yml
+
+trigger:
+- develop
+- release
+- master
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  imageName: 'app:holaMundo'
+
+stages:
+- stage: Build
+  displayName: 'Build Stage'
+  jobs:
+  - job: Build_Job
+    displayName: 'Build Job'
+    steps:
+    - task: Maven@3
+      inputs:
+        mavenPomFile: 'pom.xml'
+        goals: 'package'
+        options: '-DskipTests'
+
+    - task: CopyFiles@2
+      inputs:
+        contents: 'target/microservicio-evaluacion-backend-1.0-SNAPSHOT.jar'
+        targetFolder: '$(Build.ArtifactStagingDirectory)'
+
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        ArtifactName: 'drop'
+        publishLocation: 'Container'
+
+- stage: BuildDockerImage
+  displayName: 'Build Docker Image Stage'
+  dependsOn: Build
+  jobs:
+  - job: BuildDockerImage_Job
+    displayName: 'Build Docker Image Job'
+    steps:
+    - script: |
+        docker build -t $(imageName) -f Dockerfile .
+        docker save $(imageName) | gzip > $(Build.ArtifactStagingDirectory)/$(imageName).tar.gz
+      displayName: 'Build Docker Image'
+
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)/$(imageName).tar.gz'
+        ArtifactName: 'docker-image'
+        publishLocation: 'Container'
