@@ -4,8 +4,8 @@ trigger:
 - release
 - master
 
-pool:
-  vmImage: 'ubuntu-latest'
+# pooml:
+#   vmIage: 'ubuntu-latest'
 
 resources:
   repositories:
