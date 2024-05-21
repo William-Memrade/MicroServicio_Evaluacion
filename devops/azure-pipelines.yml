@@ -5,7 +5,7 @@ trigger:
 - master
 
 pool:
-  name: Default
+  name: default
   demands:
   - agent.name -equals self-hosted
 
