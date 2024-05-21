@@ -1,0 +1,17 @@
+# azure-pipelines.yml
+trigger:
+- develop
+- release
+- master
+
+pool: 'pool-linux'
+
+resources:
+  repositories:
+    - repository: templates
+      type: git
+      name: cloud_devops_evaluacion
+      ref: 'master'
+
+stages:
+- template: templates/buildTemplate.yml@templates
