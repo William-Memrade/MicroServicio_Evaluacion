@@ -5,7 +5,7 @@ FROM openjdk:11-jre-slim
 WORKDIR /app
 
 # Copiar el archivo JAR al contenedor
-COPY target/microservicio-evaluacion-backend-1.0-SNAPSHOT.jar /app/HolaMundo.jar
+COPY microservicio-evaluacion-backend-1.0-SNAPSHOT.jar /app/HolaMundo.jar
 
 # Exponer el puerto 8080
 EXPOSE 8080
